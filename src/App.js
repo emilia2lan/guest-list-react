@@ -1,18 +1,42 @@
+/** @jsxImportSource @emotion/react */
+import { css } from '@emotion/react';
 import { useEffect, useState } from 'react';
 import './App.css';
+
+const entirePage = css`
+  margin: 0;
+  padding: 0;
+  align-items: center;
+  background-color: #fffdd0;
+  background-image: radial-gradient(
+      circle farthest-side at top left,
+      transparent,
+      #0d64ff
+    ),
+    radial-gradient(ellipse farthest-corner at 0% 100%, transparent, #ff00a0);
+  animation: bg-change 20s infinite;
+`;
+
 export function handleChange(e) {
   console.log(e.target.value);
 }
 const baseUrl = 'http://localhost:5000';
+
 function App() {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
-  const [userData, setUserData] = useState([
-    { firstName: 'emily ', lastName: 'tulan' },
-  ]);
-  // Add guest to API localhost:5000
-  console.log(userData);
+  const [guestList, setGuestList] = useState([]);
+
+  async function getListOfGuests() {
+    const response = await fetch(`${baseUrl}/`);
+    const allGuest = await response.json();
+    console.log(allGuest[0]);
+    // 3. update the userData
+    setGuestList(allGuest);
+  }
+
   async function addGuest() {
+    // add a guest on the server
     const response = await fetch(`${baseUrl}/`, {
       method: 'POST',
       headers: {
@@ -20,26 +44,45 @@ function App() {
       },
       body: JSON.stringify({ firstName: firstName, lastName: lastName }),
     });
-    setUserData([await response.json()]);
-    //console.log(await response.json());
+    //  setUserData([await response.json()]);
+    console.log(await response.json());
+    setFirstName('');
+    setLastName('');
+    // 4. show the updated list on the page
+    getListOfGuests();
   }
+
+  async function updatedGuestFunction(boolean, id) {
+    const response = await fetch(`${baseUrl}/${id}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ attending: boolean }),
+    });
+    // const updatedGuest = await response.json();
+    getListOfGuests();
+  }
+  async function deleteGuest(deleteGuest, id) {
+    const response = await fetch(`${baseUrl}/${id}`, { method: 'DELETE' });
+    await response.json();
+
+    getListOfGuests();
+  }
+
   useEffect(
     () => {
-      async function fetchData() {
-        const response = await fetch(`${baseUrl}`);
-        const data = await response.json();
-        console.log(data[0]);
-      }
-      fetchData();
+      // 2. its going to run the fetchdata()
+      getListOfGuests();
     },
-    // Empty dependency array says that we only want to run
-    // this on the first mount (only once, on load)
+    // 1. when userData is updated, the use effect function will run
     [],
   );
   return (
-    <section className="container">
-      <div>
-        <h1> Guest List </h1>
+    <section css={entirePage}>
+      <div className="bodyPage">
+        <h1> Guest List App</h1>
+        <p>Introduce the name of the guest in the forms below:</p>
         <p>First Name:</p>
         <input
           type="text"
@@ -52,16 +95,44 @@ function App() {
           value={lastName}
           onChange={(e) => setLastName(e.target.value)}
         />
+        <button onClick={addGuest}>Add guest to the list</button>
         <br />
-        <br />
-        <h2>Guest List</h2>
-        <b>First name:</b> {userData[0].firstName}
-        <br />
-        <b>Last name:</b> {userData[0].lastName}
-        <br />
-        <button onClick={addGuest}>Click me</button>
+        <p>
+          Here you can see all the guest, check the box if they attend your
+          event. Also, you have the possibility to delete the guest.
+        </p>
+        {guestList.map((guest, id) => {
+          return (
+            <div key={id}>
+              {guest.id} {guest.firstName} {guest.lastName} {guest.attending}
+              <label>
+                {' '}
+                <input
+                  type="checkbox"
+                  onChange={() => {
+                    updatedGuestFunction(!guest.attending, guest.id);
+                  }}
+                  checked={guest.attending}
+                  Attending
+                />
+              </label>
+              <br />
+              <label>
+                <button
+                  onClick={() => {
+                    deleteGuest(!guest.deleteGuest, guest.id);
+                  }}
+                  clicked={guest.guest}
+                >
+                  Delete{' '}
+                </button>
+              </label>
+            </div>
+          );
+        })}
       </div>
     </section>
   );
 }
+
 export default App;
