@@ -53,6 +53,7 @@ function App() {
   }
 
   async function updatedGuestFunction(boolean, id) {
+    // eslint-disable-next-line
     const response = await fetch(`${baseUrl}/${id}`, {
       method: 'PATCH',
       headers: {
@@ -60,9 +61,9 @@ function App() {
       },
       body: JSON.stringify({ attending: boolean }),
     });
-    // const updatedGuest = await response.json();
-    getListOfGuests();
+       getListOfGuests();
   }
+  // eslint-disable-next-line
   async function deleteGuest(deleteGuest, id) {
     const response = await fetch(`${baseUrl}/${id}`, { method: 'DELETE' });
     await response.json();
