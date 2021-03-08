@@ -17,10 +17,7 @@ const entirePage = css`
   animation: bg-change 20s infinite;
 `;
 
-export function handleChange(e) {
-  console.log(e.target.value);
-}
-const baseUrl = 'http://localhost:5000';
+const baseUrl = 'https://guest-list-server-em.herokuapp.com/';
 
 export default function App() {
   const [firstName, setFirstName] = useState('');
@@ -30,7 +27,7 @@ export default function App() {
   async function getListOfGuests() {
     const response = await fetch(`${baseUrl}/`);
     const allGuest = await response.json();
-    console.log(allGuest[0]);
+
     // 3. update the userData
     setGuestList(allGuest);
   }
@@ -45,7 +42,6 @@ export default function App() {
       body: JSON.stringify({ firstName: firstName, lastName: lastName }),
     });
     //  setUserData([await response.json()]);
-    console.log(await response.json());
     setFirstName('');
     setLastName('');
     // 4. show the updated list on the page
@@ -61,7 +57,7 @@ export default function App() {
       },
       body: JSON.stringify({ attending: boolean }),
     });
-       getListOfGuests();
+    getListOfGuests();
   }
   // eslint-disable-next-line
   async function deleteGuest(deleteGuest, id) {
