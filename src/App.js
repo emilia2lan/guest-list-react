@@ -33,7 +33,7 @@ export default function App() {
   }
 
   async function addGuest() {
-    // add a guest on the server
+    // eslint-disable-next-line
     const response = await fetch(`${baseUrl}/`, {
       method: 'POST',
       headers: {
