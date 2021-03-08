@@ -22,7 +22,7 @@ export function handleChange(e) {
 }
 const baseUrl = 'http://localhost:5000';
 
-function App() {
+export default function App() {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [guestList, setGuestList] = useState([]);
@@ -53,6 +53,7 @@ function App() {
   }
 
   async function updatedGuestFunction(boolean, id) {
+    // eslint-disable-next-line
     const response = await fetch(`${baseUrl}/${id}`, {
       method: 'PATCH',
       headers: {
@@ -63,6 +64,7 @@ function App() {
     // const updatedGuest = await response.json();
     getListOfGuests();
   }
+  // eslint-disable-next-line
   async function deleteGuest(deleteGuest, id) {
     const response = await fetch(`${baseUrl}/${id}`, { method: 'DELETE' });
     await response.json();
@@ -134,5 +136,3 @@ function App() {
     </section>
   );
 }
-
-export default App;
