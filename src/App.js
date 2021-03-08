@@ -61,8 +61,7 @@ export default function App() {
       },
       body: JSON.stringify({ attending: boolean }),
     });
-    // const updatedGuest = await response.json();
-    getListOfGuests();
+       getListOfGuests();
   }
   // eslint-disable-next-line
   async function deleteGuest(deleteGuest, id) {
