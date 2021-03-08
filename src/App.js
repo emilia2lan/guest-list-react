@@ -33,8 +33,7 @@ export default function App() {
   }
 
   async function addGuest() {
-    // eslint-disable-next-line
-    const response = await fetch(`${baseUrl}/`, {
+    await fetch(`${baseUrl}/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -49,8 +48,7 @@ export default function App() {
   }
 
   async function updatedGuestFunction(boolean, id) {
-    // eslint-disable-next-line
-    const response = await fetch(`${baseUrl}/${id}`, {
+    await fetch(`${baseUrl}/${id}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
@@ -59,8 +57,8 @@ export default function App() {
     });
     getListOfGuests();
   }
-  // eslint-disable-next-line
-  async function deleteGuest(deleteGuest, id) {
+
+  async function deleteGuest(id) {
     const response = await fetch(`${baseUrl}/${id}`, { method: 'DELETE' });
     await response.json();
 
@@ -117,7 +115,7 @@ export default function App() {
               <label>
                 <button
                   onClick={() => {
-                    deleteGuest(!guest.deleteGuest, guest.id);
+                    deleteGuest(guest.id);
                   }}
                   clicked={guest.guest}
                 >
