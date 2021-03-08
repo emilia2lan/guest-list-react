@@ -17,7 +17,7 @@ const entirePage = css`
   animation: bg-change 20s infinite;
 `;
 
-const baseUrl = 'https://guest-list-server-em.herokuapp.com/';
+const baseUrl = 'https://guest-list-server-em.herokuapp.com';
 
 export default function App() {
   const [firstName, setFirstName] = useState('');
