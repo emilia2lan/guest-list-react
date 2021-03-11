@@ -40,7 +40,6 @@ export default function App() {
       },
       body: JSON.stringify({ firstName: firstName, lastName: lastName }),
     });
-    //  setUserData([await response.json()]);
     setFirstName('');
     setLastName('');
     // 4. show the updated list on the page
